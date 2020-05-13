@@ -31,7 +31,7 @@ height (within the boundaries of the fork) at which the contract was deployed, t
 > **NOTE**: Make sure that the used ports in the `docker-compose.yaml` port mappings are not occupied by e.g. a locally running Ganache instance.
 
 5. Run `(cd subgraph && yarn)`
-6. Run `(cd subgraph && truffle migrate)`
+6. Run `(cd subgraph && yarn truffle migrate)`
 
 > **NOTE**: Already here, I would expect the hosted Ganache fork to not even be involved in the deployment because I am deploying into my local fork (fork of fork). This assumption doesn't seem to be correct because I am seeing lots of calls to `eth_getBlockByNumber`,`eth_getTransactionByHash`, `eth_getStorageAt`, `eth_getTransactionCount` and `eth_getBalance` in my MoonNet logs. This means that instead of my local fork handling these requests on its own, it's actually proxying to the MoonNet node.
 
