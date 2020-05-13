@@ -12,7 +12,7 @@ dataSources:
       address: "0xE29372533dA451115AE4c24b370F75Cd86a6d15D"
       abi: Gravity
       #PASTE START BLOCK HERE INSTEAD OF 99999999
-      startBlock: 10056910
+      startBlock: 99999999
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
