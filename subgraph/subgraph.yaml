@@ -9,10 +9,10 @@ dataSources:
     network: mainnet
     source:
       #PASTE CONTRACT ADDRESS HERE INSTEAD OF CURRENT ADDRESS
-      address: "0x0B14c26677c1e0cFB0b5f4Fa95356738A9aa1298"
+      address: "0xE29372533dA451115AE4c24b370F75Cd86a6d15D"
       abi: Gravity
-      #PASTE START BLOCK HERE INSTEAD OF 0
-      startBlock: 0
+      #PASTE START BLOCK HERE INSTEAD OF 99999999
+      startBlock: 10056910
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

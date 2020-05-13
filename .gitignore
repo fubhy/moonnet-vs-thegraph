@@ -1,0 +1,7 @@
+.*
+
+!.env.example
+!.gitignore
+
+build/
+generated/

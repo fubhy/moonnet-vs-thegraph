@@ -14,7 +14,7 @@ As the spec is not followed strictly across the board (web3, ganache, ethers, et
 
 Pull request: https://github.com/graphprotocol/graph-node/pull/1658
 
-## Problem #2: Indexing exceeding archive node rate limit
+## Problem #2: Indexing exceeding archive node rate limit [FIXED]
 
 ### Description
 
@@ -31,15 +31,15 @@ height (within the boundaries of the fork) at which the contract was deployed, t
 > **NOTE**: Make sure that the used ports in the `docker-compose.yaml` port mappings are not occupied by e.g. a locally running Ganache instance.
 
 5. Run `(cd subgraph && yarn)`
-6. Run `(cd subgraph && yarn truffle migrate)`
+6. Run `(cd subgraph && truffle migrate)`
 
-> **NOTE**: This already fails frequently for me. Already here, I would expect the hosted Ganache fork to not even be involved in the deployment because I am deploying into my local fork (fork of fork). This assumption doesn't seem to be correct because I am seeing lots of calls to `eth_getBlockByNumber` and `eth_getTransactionByHash` in my MoonNet logs.
+> **NOTE**: Already here, I would expect the hosted Ganache fork to not even be involved in the deployment because I am deploying into my local fork (fork of fork). This assumption doesn't seem to be correct because I am seeing lots of calls to `eth_getBlockByNumber`,`eth_getTransactionByHash`, `eth_getStorageAt`, `eth_getTransactionCount` and `eth_getBalance` in my MoonNet logs. This means that instead of my local fork handling these requests on its own, it's actually proxying to the MoonNet node.
 
-6. Copy & paste the `GravatarRegistry` contract address and block number at which it was deployed to `subgraph/subgraph.yaml`
+7. Copy & paste the `GravatarRegistry` contract address and block number at which it was deployed to `subgraph/subgraph.yaml`
 
 > **NOTE**: You can find both in the log output of the `truffle migrate` command. The `startBlock` configuration option should result in `graph-node` only querying and indexing block heights above this threshold. I am therefore not expecting any calls to fall through to the underlying archive node. In fact, it _shouldn't_ even hit the hosted MoonNet Ganache fork (but it does).
 
-7. Run `(cd subgraph && yarn codegen && yarn create-local || true && yarn deploy-local)`
+8. Run `(cd subgraph && yarn codegen && yarn create-local || true && yarn deploy-local)`
 
 > **NOTE**: For subsequent runs, you actually only need to run `yarn deploy-local` but the above command runs them all in sequence for convenience.
 
@@ -69,3 +69,7 @@ If, at any point in time you need to start over, simply run `docker-compose down
 #### Working version
 
 If you want to see how this example _should_ work, simply remove the `fork` option from the `ganache` service in `docker-compose.yaml`.
+
+### Fix
+
+By setting `ETHEREUM_REORG_THRESHOLD=1` and `ETHEREUM_ANCESTOR_COUNT=1` in the `thegraph` service, it now only queries for the latest block and its transaction receipts on startup. This could even be further optimized by generating a few blocks on the fork at startup so it is guaranteed to never reach out to the underlying fork.
