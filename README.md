@@ -24,17 +24,14 @@ height (within the boundaries of the fork) at which the contract was deployed, t
 ### Steps to reproduce
 
 1. Clone this repository
-2. Run `export MOONNET_UUID=YOUR_MOONNET_UUID`
-
-> **NOTE**: Obviously, replace `YOUR_MOONNET_UUID` with your moonnet uuid.
-
+2. Copy the `.env.example` file to `.env` and fill in the `MOONET_UUID` parameter
 3. Run `docker-compose pull` to make sure you are on the correct docker image versions used in `docker-compose.yaml`
 4. Run `docker-compose up -d` to boot the docker services.
 
 > **NOTE**: Make sure that the used ports in the `docker-compose.yaml` port mappings are not occupied by e.g. a locally running Ganache instance.
 
 5. Run `(cd subgraph && yarn)`
-6. Run `(cd subgraph && yarn truffle compile && yarn truffle migrate)`
+6. Run `(cd subgraph && yarn truffle migrate)`
 
 > **NOTE**: This already fails frequently for me. Already here, I would expect the hosted Ganache fork to not even be involved in the deployment because I am deploying into my local fork (fork of fork). This assumption doesn't seem to be correct because I am seeing lots of calls to `eth_getBlockByNumber` and `eth_getTransactionByHash` in my MoonNet logs.
 
